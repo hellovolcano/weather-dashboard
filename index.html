@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
     <title>Weather Dashboard</title>
 </head>
 <body>
@@ -13,22 +14,37 @@
     </header>
     <main>
         <div class="container">
-            <div class="row">
-                <div class="col-12 col-md-3">
+            <div class="row mt-3">
+                <!-- Column for the search/city sidebar-->
+                <div class="col-12 col-md-4">
                     <div>
-                        <h2>Search for a city: </h2>
-                        <form>
-                            
+                        <h2>Search for a City: </h2>
+                        <form id="search-form">
+                            <input type="text" name="search-field" id="search-field" class="form-control">
+                            <button class="btn btn-primary" id="search-btn">Search</button>
                         </form>
+                        <hr>
                     </div>
+                    <!-- Div for major city search buttons -->
+                    <div>
 
+                    </div>
                 </div>
-                <div class="col-12 col-md-9">
+                <!-- Column for the city search results -->
+                <div class="col-12 col-md-8">
+                    <!-- City deep dive current day -->
+                    <div class="current-day">
+                        <h2 id="city-info"></h2>
+                    </div>
+                    <!-- 5 day forecase for selected city-->
+                    <div>
 
+                    </div>
                 </div>
             </div>
         </div>
 
     </main>
+    <script src="./assets/js/script.js"></script>
 </body>
 </html>
