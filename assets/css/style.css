@@ -15,3 +15,19 @@ button {
     border: 1px solid black;
     padding: 15px;
 }
+
+/* Styles for 5 Day Forecast Area */
+.five-day-forecast {
+    display: flex;
+    justify-content: space-between;
+}
+
+.five-day-forecast-card {
+    background-color: navy;
+    color: white;
+    padding: 10px;
+}
+
+.five-day-forecast-card h3 {
+    font-size: 1rem;
+}
