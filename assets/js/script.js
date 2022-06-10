@@ -20,14 +20,11 @@ var loadPrevSearchTerms = function() {
       prevSearchTerms = []
     }
   
-    // loop over object properties
-    for (var i = 0; i < prevSearchTerms.length; i++) {
-        console.log(prevSearchTerms[i])
-    }
+    // loop over object properties for each city name, add a button
+    createPrevSearchBtn(prevSearchTerms)
     }
 
-// load previous search terms
-loadPrevSearchTerms()
+
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -192,6 +189,25 @@ var savePrevSearch = function(array) {
     localStorage.setItem("prevSearchTerms", JSON.stringify(prevSearchTerms));
 }
 
+var createPrevSearchBtn = function(array) {
+    // loop through array 
+    for (var i = 0; i < array.length; i++) {
+
+    
+    // create the button
+    var prevSearchButton = document.createElement("button")
+    prevSearchButton.textContent = array[i].city
+    prevSearchButton.setAttribute("value", array[i].city)
+    prevSearchButton.classList.add("btn")
+    prevSearchButton.classList.add("btn-light")
+    prevSearchButton.classList.add("prev-search")
+
+    //append the button to the container div
+    prevSearchEl.append(prevSearchButton)
+
+    }
+}
+
 var displayPrevSearch = function(lat, lon) {
     var searchTerm = cityInfoEl.textContent
     var city = searchTerm.split("(")[0].trim()
@@ -202,26 +218,26 @@ var displayPrevSearch = function(lat, lon) {
         lon: lon
     }
 
-    // create a button for the city
-    var prevSearchButton = document.createElement("button")
-    prevSearchButton.textContent = city
-    prevSearchButton.setAttribute("data-lat", lat)
-    prevSearchButton.setAttribute("data-lon", lon)
-    prevSearchButton.setAttribute("value", city)
-    prevSearchButton.classList.add("btn")
-    prevSearchButton.classList.add("btn-light")
-    prevSearchButton.classList.add("prev-search")
-    // append the button to the container div
-    prevSearchEl.append(prevSearchButton)
+    // createPrevSearchBtn(city)
 
-    console.log(cityInfoEl.textContent)
-    prevSearchTerms.push(prevCity)
+    // use unshift method to place the most recently searched city in the 0 index
+    prevSearchTerms.unshift(prevCity)
 
+    // limit the array that stores the previous searches to 10. Pop out the last element whenever the array length = 11
+    if (prevSearchTerms.length == 11) {
+        prevSearchTerms.pop()
+    }
+
+    // clear what was there before and then build the search buttons with the new order
+    prevSearchEl.textContent = ""
+    createPrevSearchBtn(prevSearchTerms)
+    
     savePrevSearch(prevSearchTerms)
 
 }
 
-
+// load previous search terms
+loadPrevSearchTerms()
 
 // event listener for the initial search form
 searchFormEl.addEventListener("submit", formSubmitHandler)

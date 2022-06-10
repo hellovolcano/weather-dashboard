@@ -16,6 +16,11 @@ button {
     padding: 15px;
 }
 
+/* Add padding around the flex columns */
+.container-div {
+    padding: 20px;
+}
+
 /* Styles for 5 Day Forecast Area */
 .five-day-forecast {
     display: flex;
