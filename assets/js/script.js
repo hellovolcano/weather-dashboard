@@ -129,9 +129,31 @@ var displayCurrentDayWeather = function(array) {
     var humidityEl = document.createElement("p")
     humidityEl.textContent = "Humidity: " + array.current.humidity + " %"
 
-    // create element to store UV
+    // create element to store UV for color-coding
+    var UVSpanEl = document.createElement("span")
+    UVSpanEl.textContent = array.current.uvi
+
+    // add uv class with common styles
+    UVSpanEl.classList.add("uv-index")
+
+    // add another class based on the uv index value based on this graphic: https://www.epa.gov/sunsafety/calculating-uv-index-0
+    if (array.current.uvi < 3) {
+        UVSpanEl.classList.add("uvi-low")
+    } else if (array.current.uvi >= 3 && array.current.uvi < 6) {
+        UVSpanEl.classList.add("uvi-med-low")
+    } else if (array.current.uvi >= 6 && array.current.uvi < 8) {
+        UVSpanEl.classList.add("uvi-med-high")
+    } else if (array.current.uvi >= 8 && array.current.uvi < 11) {
+        UVSpanEl.classList.add("uvi-high")
+    } else {
+        UVSpanEl.classList.add("uvi-scorcher")
+    }
+
     var UVEl = document.createElement("p")
-    UVEl.textContent = "UV Index: " + array.current.uvi
+    UVEl.textContent = "UV Index: "
+
+    // append the UV Index span to the paragraph
+    UVEl.append(UVSpanEl)
 
     // append all to the div
     currentDayInfoEl.append(tempEl,windEl,humidityEl,UVEl)
