@@ -4,9 +4,30 @@ var cityInfoEl = document.querySelector("#city-info");
 var apiKey = "126f457772cbca5e011de1b69127c8f8"
 var currentDayInfoEl = document.querySelector("#current-day-info")
 var fiveDayForecastEl = document.querySelector("#five-day-forecast")
+var prevSearchEl = document.querySelector("#prev-search-terms")
+
+// initialize previous search terms array
+var prevSearchTerms = []
 
 // get the current date
 var currentDate = luxon.DateTime.now().toFormat('MM/dd/yyyy')
+
+var loadPrevSearchTerms = function() {
+    prevSearchTerms = JSON.parse(localStorage.getItem("prevSearchTerms"));
+
+    // if nothing in localStorage, create a new object to track all task status arrays
+    if (!prevSearchTerms) {
+      prevSearchTerms = []
+    }
+  
+    // loop over object properties
+    for (var i = 0; i < prevSearchTerms.length; i++) {
+        console.log(prevSearchTerms[i])
+    }
+    }
+
+// load previous search terms
+loadPrevSearchTerms()
 
 var formSubmitHandler = function(event) {
     event.preventDefault();
@@ -19,7 +40,8 @@ var formSubmitHandler = function(event) {
         cityToLatLong(city);
         searchTerm.value = "";
 
-        cityInfoEl.textContent = city + " (" + currentDate + ")";
+        
+
 
     } else {
         alert("Please enter a city")
@@ -36,12 +58,23 @@ var cityToLatLong = function(city) {
     //clear out the previous results
     currentDayInfoEl.textContent = ''
 
+    // set the header
+    cityInfoEl.textContent = city + " (" + currentDate + ")";
+
     // make a request to the url
     fetch(apiUrl)
         .then(function(response) {
         // request was successful
         if (response.ok) {
            response.json().then(function(data) {
+
+                // append the icon to the header
+                var iconUrl = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png"
+                var iconImg = document.createElement("img")
+                iconImg.setAttribute("src",iconUrl)
+                iconImg.setAttribute("alt", "Glyph depicting the weather for the day")
+                cityInfoEl.append(iconImg)
+
                getLatLong(data)
            });
         } else {
@@ -50,17 +83,17 @@ var cityToLatLong = function(city) {
         })
         .catch(function(error) {
             // Catch for any errors from the server
-            alert("Unable to weather service");
+            alert("Unable to connect to weather service");
         });
 };
 
 var getLatLong = function(array) {
     var lat = array.coord.lat
     var lon = array.coord.lon
-    console.log(lat)
-    console.log(lon)
+
     // use one API to search for the city based on latitude and longitude
     searchCity(lat,lon)
+    displayPrevSearch(lat, lon)
 }
 
 var searchCity = function(lat, lon) {
@@ -82,7 +115,7 @@ var searchCity = function(lat, lon) {
         })
         .catch(function(error) {
             // Catch for any errors from the server
-            alert("Unable to weather service");
+            alert("Unable to connect to weather service");
         });
 };
 
@@ -111,7 +144,7 @@ var displayFiveDayForecast = function(array) {
 
     // clear out any five day forecast from previous searches
     fiveDayForecastEl.textContent=''
-    // for loop to get the next 5 days of data
+    // for loop to get the next 5 days of data. Start at 1 since index 0 is today's date
     for (var i = 1; i < 6; i++) {
         // convert the unix timestamp to a human readable date using luxon
         var date  = luxon.DateTime.fromSeconds(array.daily[i].dt).toFormat('MM/dd/yyyy')
@@ -134,7 +167,7 @@ var displayFiveDayForecast = function(array) {
 
         fiveDayIcon.append(fiveDayIconImg)
         // fiveDayIcon.innerHTML = array.daily[i].weather.icon
-        console.log(fiveDayIconImg)
+        
         // get the temp for the day
         var fiveDayTemp = document.createElement("p")
         fiveDayTemp.textContent= "Temp: " + array.daily[i].temp.day + " °F"
@@ -155,4 +188,51 @@ var displayFiveDayForecast = function(array) {
 
 }
 
+var savePrevSearch = function(array) {
+    localStorage.setItem("prevSearchTerms", JSON.stringify(prevSearchTerms));
+}
+
+var displayPrevSearch = function(lat, lon) {
+    var searchTerm = cityInfoEl.textContent
+    var city = searchTerm.split("(")[0].trim()
+    // create an object with the information we need
+    var prevCity = {
+        city: city,
+        lat: lat,
+        lon: lon
+    }
+
+    // create a button for the city
+    var prevSearchButton = document.createElement("button")
+    prevSearchButton.textContent = city
+    prevSearchButton.setAttribute("data-lat", lat)
+    prevSearchButton.setAttribute("data-lon", lon)
+    prevSearchButton.setAttribute("value", city)
+    prevSearchButton.classList.add("btn")
+    prevSearchButton.classList.add("btn-light")
+    prevSearchButton.classList.add("prev-search")
+    // append the button to the container div
+    prevSearchEl.append(prevSearchButton)
+
+    console.log(cityInfoEl.textContent)
+    prevSearchTerms.push(prevCity)
+
+    savePrevSearch(prevSearchTerms)
+
+}
+
+
+
+// event listener for the initial search form
 searchFormEl.addEventListener("submit", formSubmitHandler)
+
+// event listener for the previous search area
+prevSearchEl.addEventListener("click", function(event) {
+
+    // get the event and the lat and lon from the data attributes we set earlier
+    var city = event.target.value
+
+    // Pass in the button click to the cityToLatLong function to update the info for the city)
+    cityToLatLong(city)
+    
+})
