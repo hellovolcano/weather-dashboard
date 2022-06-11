@@ -1,3 +1,11 @@
+body {
+    font-family: 'Red Hat Display', sans-serif;
+}
+
+h1, h2, h3 {
+    font-weight: 800;
+}
+
 header {
     color: white;
     background-color: blue;
@@ -66,4 +74,24 @@ button {
 
 .five-day-forecast-card h3 {
     font-size: 1rem;
+}
+
+/* Media Queries */
+
+@media screen and (max-width: 600px) {
+    header {
+        width: 100%;
+    }
+
+    .five-day-forecast {
+        flex-direction: column;
+        /* height: 200px; */
+        flex-wrap: wrap;
+        
+    }
+
+    .five-day-forecast-card {
+        flex-basis: 100%;
+        margin-top: 10px;
+    }
 }

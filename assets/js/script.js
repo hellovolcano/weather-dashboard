@@ -240,7 +240,8 @@ var displayPrevSearch = function(lat, lon) {
         lon: lon
     }
 
-    // createPrevSearchBtn(city)
+    // handle the case of a new search that 
+
 
     // use unshift method to place the most recently searched city in the 0 index
     prevSearchTerms.unshift(prevCity)
