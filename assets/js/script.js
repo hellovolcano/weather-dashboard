@@ -218,8 +218,8 @@ var createPrevSearchBtn = function(array) {
     
     // create the button
     var prevSearchButton = document.createElement("button")
-    prevSearchButton.textContent = array[i].city
-    prevSearchButton.setAttribute("value", array[i].city)
+    prevSearchButton.textContent = array[i]
+    prevSearchButton.setAttribute("value", array[i])
     prevSearchButton.classList.add("btn")
     prevSearchButton.classList.add("btn-light")
     prevSearchButton.classList.add("prev-search")
@@ -233,18 +233,16 @@ var createPrevSearchBtn = function(array) {
 var displayPrevSearch = function(lat, lon) {
     var searchTerm = cityInfoEl.textContent
     var city = searchTerm.split("(")[0].trim()
-    // create an object with the information we need
-    var prevCity = {
-        city: city,
-        lat: lat,
-        lon: lon
+
+    // if the city already exists in the array, let's not add a duplicate
+    var cityExists = prevSearchTerms.indexOf(city)
+
+    if(cityExists !== -1) {
+        return
     }
 
-    // handle the case of a new search that 
-
-
     // use unshift method to place the most recently searched city in the 0 index
-    prevSearchTerms.unshift(prevCity)
+    prevSearchTerms.unshift(city)
 
     // limit the array that stores the previous searches to 10. Pop out the last element whenever the array length = 11
     if (prevSearchTerms.length == 11) {
