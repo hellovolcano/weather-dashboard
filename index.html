@@ -26,7 +26,7 @@
                         <h2>Search for a City: </h2>
                         <form id="search-form">
                             <input type="text" name="search-field" id="search-field" class="form-control">
-                            <button class="btn btn-primary" id="search-btn">Search</button>
+                            <button class="btn btn-info" id="search-btn">Search</button>
                         </form>
                         <hr>
                     </div>
@@ -34,12 +34,17 @@
                     <div id="prev-search-terms">
 
                     </div>
+                    <div id="clear-search-history" class="d-none">
+                        <hr>
+                        <button class="btn btn-secondary" id="clear-search-btn">Clear Search History</button>
+                    </div>
                 </div>
                 <!-- Column for the city search results -->
                 <div class="col-12 col-md-8 col-lg-8">
                     <!-- City deep dive current day -->
                     <div class="current-day">
-                        <h2 id="city-info"></h2>
+                        <h2 id="city-info">Welcome to the Weather Dashboard!</h2>
+                        <div id="intro">Please search for a city in the search form to the left to get information about the weather for today, as well as the 5 day forecast.</div>
                         <div id="current-day-info">
                             <!-- Will generate info for today in that city here -->
                         </div>

@@ -19,6 +19,7 @@ button {
     margin-top: 15px;
 }
 
+
 /* Styles for the current day info section */
 .current-day {
     border: 1px solid black;
@@ -69,7 +70,7 @@ button {
 .five-day-forecast-card {
     background-color: rgb(1, 1, 35);
     color: white;
-    padding: 10px;
+    padding: 15px;
 }
 
 .five-day-forecast-card h3 {
@@ -78,7 +79,7 @@ button {
 
 /* Media Queries */
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 730px) {
     header {
         width: 100%;
     }

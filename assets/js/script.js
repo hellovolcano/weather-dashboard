@@ -5,6 +5,10 @@ var apiKey = "126f457772cbca5e011de1b69127c8f8"
 var currentDayInfoEl = document.querySelector("#current-day-info")
 var fiveDayForecastEl = document.querySelector("#five-day-forecast")
 var prevSearchEl = document.querySelector("#prev-search-terms")
+var introTextEl = document.querySelector("#intro")
+var clearSearchEl = document.querySelector("#clear-search-history")
+
+var clearSearchBtnEl = document.querySelector("#clear-search-btn")
 
 // initialize previous search terms array
 var prevSearchTerms = []
@@ -22,7 +26,33 @@ var loadPrevSearchTerms = function() {
   
     // loop over object properties for each city name, add a button
     createPrevSearchBtn(prevSearchTerms)
+
+    // add a button to clear search history
+    clearPrevSearchTerms()
     }
+
+var clearSearchHistoryHandler = function() {
+
+    // clear out the array and clear local storage
+    prevSearchTerms = []
+    localStorage.clear()
+
+    // hide the clear search history since there are no previously saved entries to clear
+    clearSearchEl.classList.add("d-none")
+
+    // clear the view of previous search words
+    prevSearchEl.textContent = ""
+ }
+
+var clearPrevSearchTerms = function() {
+    // if there are cities saved in local storage, remove the hidden class from the Clear Search History section
+
+    if(prevSearchTerms.length > 0) {
+        console.log(prevSearchTerms)
+        clearSearchEl.classList.remove("d-none")
+    }
+
+}    
 
 
 
@@ -36,10 +66,6 @@ var formSubmitHandler = function(event) {
     if (city) {
         cityToLatLong(city);
         searchTerm.value = "";
-
-        
-
-
     } else {
         alert("Please enter a city")
     }
@@ -54,9 +80,9 @@ var cityToLatLong = function(city) {
 
     //clear out the previous results
     currentDayInfoEl.textContent = ''
-
-    // set the header
-    cityInfoEl.textContent = city + " (" + currentDate + ")";
+    introTextEl.textContent = ''
+    // clear out any five day forecast from previous searches
+    fiveDayForecastEl.textContent=''
 
     // make a request to the url
     fetch(apiUrl)
@@ -64,6 +90,11 @@ var cityToLatLong = function(city) {
         // request was successful
         if (response.ok) {
            response.json().then(function(data) {
+
+                
+
+                // set the header
+                cityInfoEl.textContent = city + " (" + currentDate + ")";
 
                 // append the icon to the header
                 var iconUrl = "http://openweathermap.org/img/w/" + data.weather[0].icon + ".png"
@@ -75,7 +106,8 @@ var cityToLatLong = function(city) {
                getLatLong(data)
            });
         } else {
-            alert("Error: City cannot be found");
+            cityInfoEl.textContent = city + ' was not found. Please check your submission for errors and try again!'
+
         }
         })
         .catch(function(error) {
@@ -161,8 +193,7 @@ var displayCurrentDayWeather = function(array) {
 
 var displayFiveDayForecast = function(array) {
 
-    // clear out any five day forecast from previous searches
-    fiveDayForecastEl.textContent=''
+    
     // for loop to get the next 5 days of data. Start at 1 since index 0 is today's date
     for (var i = 1; i < 6; i++) {
         // convert the unix timestamp to a human readable date using luxon
@@ -255,6 +286,8 @@ var displayPrevSearch = function(lat, lon) {
     
     savePrevSearch(prevSearchTerms)
 
+    // add a button to clear search history
+    clearPrevSearchTerms()
 }
 
 // load previous search terms
@@ -273,3 +306,6 @@ prevSearchEl.addEventListener("click", function(event) {
     cityToLatLong(city)
     
 })
+
+// clear the search history from the array and from local storage
+clearSearchBtnEl.addEventListener("click", clearSearchHistoryHandler)
