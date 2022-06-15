@@ -48,7 +48,6 @@ var clearPrevSearchTerms = function() {
     // if there are cities saved in local storage, remove the hidden class from the Clear Search History section
 
     if(prevSearchTerms.length > 0) {
-        console.log(prevSearchTerms)
         clearSearchEl.classList.remove("d-none")
     }
 

@@ -95,4 +95,13 @@ button {
         flex-basis: 100%;
         margin-top: 10px;
     }
+    /* Hide the previous search terms so they don't take up all the screen real estate on small devices */
+
+    #prev-search-terms {
+        display: none;
+    }
+
+    #clear-search-history {
+        display: none;
+    }
 }
