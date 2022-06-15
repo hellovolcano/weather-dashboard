@@ -238,7 +238,7 @@ var displayFiveDayForecast = function(array) {
 }
 
 var savePrevSearch = function(array) {
-    localStorage.setItem("prevSearchTerms", JSON.stringify(prevSearchTerms));
+    localStorage.setItem("prevSearchTerms", JSON.stringify(array));
 }
 
 var createPrevSearchBtn = function(array) {
